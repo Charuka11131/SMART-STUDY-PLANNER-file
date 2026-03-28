@@ -1,0 +1,568 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam</title>
+
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-weight: 400;
+        }
+
+        body {
+            background: #f4f6f9;
+            padding: 40px;
+        }
+
+        /* Card */
+        .exam-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 18px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            background: #eaf3ff;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .tab.active {
+                background: #1186e6;
+                color: white;
+            }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        input, select {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #dbe4ee;
+            outline: none;
+        }
+
+            input:focus, select:focus {
+                border-color: #1186e6;
+                box-shadow: 0 0 0 4px rgba(17,134,230,0.12);
+            }
+
+        .full {
+            grid-column: span 2;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .save {
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            background: #1186e6;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .cancel {
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid #1186e6;
+            background: white;
+            color: #1186e6;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .msg {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            display: none;
+            font-weight: 600;
+        }
+
+            .msg.error {
+                background: #fee2e2;
+                color: #991b1b;
+                display: block;
+            }
+
+            .msg.success {
+                background: #dcfce7;
+                color: #166534;
+                display: block;
+            }
+
+        /* Saved list */
+        .listTitle {
+            margin-top: 18px;
+            color: #6b7280;
+            font-weight: 700;
+        }
+
+        .exam-list {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .exam-row {
+            background: #fbfdff;
+            border: 1px solid #edf1f6;
+            padding: 12px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+            .exam-row:hover {
+                border-color: #b9ddff;
+                background: #f5fbff;
+            }
+
+            .exam-row.active {
+                border: 2px solid #1186e6;
+                background: #eef7ff;
+            }
+
+        .exam-name {
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .exam-meta {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eaf3ff;
+            color: #1186e6;
+            font-weight: 700;
+            font-size: 12px;
+            height: fit-content;
+        }
+
+        .exam-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .icon-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .edit-btn {
+            background: #eaf3ff;
+            color: #1186e6;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        @media (max-width: 800px) {
+            body {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="exam-card">
+
+        <div class="tabs">
+            <a class="tab" href="tasks.html">Task</a>
+            <div class="tab active">Exam</div>
+        </div>
+
+        <div class="form-grid">
+            <div class="field">
+                <label for="examName">Exam *</label>
+                <input id="examName" type="text" placeholder="Exam name">
+            </div>
+
+            <div class="field">
+                <label for="subject">Subject *</label>
+                <select id="subject">
+                    <option value="">Select Subject</option>
+                    <option>Math</option>
+                    <option>Physics</option>
+                    <option>Chemistry</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="date">Date *</label>
+                <input id="date" type="date">
+            </div>
+
+            <div class="field">
+                <label for="time">Time *</label>
+                <input id="time" type="time">
+            </div>
+
+            <div class="field full">
+                <label for="duration">Duration (In minutes)</label>
+                <input id="duration" type="number" min="0" placeholder="Duration (In minutes)">
+            </div>
+        </div>
+
+        <div id="msgBox" class="msg"></div>
+
+        <div class="buttons">
+            <button class="save" id="saveBtn" type="button">Save</button>
+            <button class="cancel" id="cancelBtn" type="button">Cancel</button>
+        </div>
+
+        <div class="listTitle" id="filterLine"></div>
+        <div class="exam-list" id="examList"></div>
+        <div id="examEmpty" style="margin-top:12px; color:#94a3b8;">No exams for this filter.</div>
+
+    </div>
+
+    <script>
+        // ✅ AUTH
+        const loggedIn = localStorage.getItem("ssp_loggedIn");
+        const currentUser = localStorage.getItem("ssp_currentUser");
+        if (loggedIn !== "true" || !currentUser) window.location.href = "login.html";
+
+        // ✅ Per-user exams key
+        const examsKey = "ssp_exams_" + currentUser.toLowerCase();
+
+        // ✅ Read dashboard filters from URL
+        const params = new URLSearchParams(location.search);
+        const filterParam = (params.get("filter") || "current").toLowerCase();
+        const subjectParam = (params.get("subject") || "").trim().toLowerCase();
+
+        const filterLine = document.getElementById("filterLine");
+        filterLine.textContent =
+            `Showing: ${filterParam.toUpperCase()}`
+            + (subjectParam ? ` • Subject: ${subjectParam}` : "");
+
+        const examNameEl = document.getElementById("examName");
+        const subjectEl = document.getElementById("subject");
+        const dateEl = document.getElementById("date");
+        const timeEl = document.getElementById("time");
+        const durationEl = document.getElementById("duration");
+
+        const saveBtn = document.getElementById("saveBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const msgBox = document.getElementById("msgBox");
+
+        const examList = document.getElementById("examList");
+        const examEmpty = document.getElementById("examEmpty");
+
+        let selectedExamId = null;
+        let editingExamId = null;
+
+        function safeParse(json, fallback) {
+            try { return JSON.parse(json); } catch { return fallback; }
+        }
+
+        function getExams() {
+            return safeParse(localStorage.getItem(examsKey) || "[]", []);
+        }
+
+        function saveExams(exams) {
+            localStorage.setItem(examsKey, JSON.stringify(exams));
+        }
+
+        function showMsg(type, text) {
+            msgBox.className = "msg " + type;
+            msgBox.textContent = text;
+        }
+
+        function clearMsg() {
+            msgBox.className = "msg";
+            msgBox.textContent = "";
+        }
+
+        function clearForm() {
+            examNameEl.value = "";
+            subjectEl.value = "";
+            dateEl.value = "";
+            timeEl.value = "";
+            durationEl.value = "";
+        }
+
+        function fillForm(exam) {
+            examNameEl.value = exam.examName || "";
+            subjectEl.value = exam.subject || "";
+            dateEl.value = exam.date || "";
+            timeEl.value = exam.time || "";
+            durationEl.value = exam.duration || "";
+        }
+
+        function escapeHtml(str) {
+            return String(str || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function startOfToday() {
+            const t = new Date();
+            t.setHours(0, 0, 0, 0);
+            return t;
+        }
+
+        function isExamPast(ex) {
+            if (!ex.date) return false;
+            const today0 = startOfToday();
+            const d = new Date(ex.date);
+            d.setHours(0, 0, 0, 0);
+            return d < today0;
+        }
+
+        function isExamCurrent(ex) {
+            if (!ex.date) return true;
+            const today0 = startOfToday();
+            const d = new Date(ex.date);
+            d.setHours(0, 0, 0, 0);
+            return d >= today0;
+        }
+
+        function applyFilters(exams) {
+            let out = [...exams];
+
+            if (subjectParam) {
+                out = out.filter(e => String(e.subject || "").toLowerCase() === subjectParam);
+            }
+
+            if (filterParam === "past") out = out.filter(isExamPast);
+            else out = out.filter(isExamCurrent);
+
+            return out;
+        }
+
+        function editExam(id) {
+            const exams = getExams();
+            const exam = exams.find(e => e.id === id);
+            if (!exam) return;
+
+            editingExamId = id;
+            fillForm(exam);
+            saveBtn.textContent = "Update Exam";
+            clearMsg();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function deleteExam(id) {
+            const ok = confirm("Are you sure you want to delete this exam?");
+            if (!ok) return;
+
+            let exams = getExams();
+            exams = exams.filter(e => e.id !== id);
+            saveExams(exams);
+
+            if (selectedExamId === id) selectedExamId = null;
+            if (editingExamId === id) {
+                editingExamId = null;
+                clearForm();
+                saveBtn.textContent = "Save";
+            }
+
+            clearMsg();
+            renderExams();
+        }
+
+        function renderExams() {
+            const exams = applyFilters(getExams());
+            examList.innerHTML = "";
+            examEmpty.style.display = exams.length ? "none" : "block";
+
+            exams.forEach(e => {
+                const row = document.createElement("div");
+                row.className = "exam-row" + (selectedExamId === e.id ? " active" : "");
+
+                row.innerHTML = `
+            <div style="flex:1;">
+              <div class="exam-name">${escapeHtml(e.examName)}</div>
+              <div class="exam-meta">
+                ${escapeHtml(e.subject)} • ${escapeHtml(e.date)} ${escapeHtml(e.time)}
+                ${e.duration ? " • " + escapeHtml(e.duration) + " min" : ""}
+              </div>
+              ${selectedExamId === e.id
+                        ? `
+                  <div class="exam-actions">
+                    <button class="icon-btn edit-btn" data-action="edit" data-id="${e.id}">✏ Edit</button>
+                    <button class="icon-btn delete-btn" data-action="delete" data-id="${e.id}">✕ Delete</button>
+                  </div>
+                `
+                        : ""
+                    }
+            </div>
+            <div class="badge">${isExamPast(e) ? "Past" : "Current"}</div>
+          `;
+
+                row.addEventListener("click", (ev) => {
+                    if (ev.target.closest("[data-action='edit']") || ev.target.closest("[data-action='delete']")) {
+                        return;
+                    }
+
+                    if (selectedExamId === e.id) selectedExamId = null;
+                    else selectedExamId = e.id;
+
+                    renderExams();
+                });
+
+                examList.appendChild(row);
+            });
+
+            document.querySelectorAll("[data-action='edit']").forEach(btn => {
+                btn.addEventListener("click", (ev) => {
+                    ev.stopPropagation();
+                    editExam(btn.dataset.id);
+                });
+            });
+
+            document.querySelectorAll("[data-action='delete']").forEach(btn => {
+                btn.addEventListener("click", (ev) => {
+                    ev.stopPropagation();
+                    deleteExam(btn.dataset.id);
+                });
+            });
+        }
+
+        saveBtn.addEventListener("click", () => {
+            clearMsg();
+
+            const examName = examNameEl.value.trim();
+            const subject = subjectEl.value;
+            const date = dateEl.value;
+            const time = timeEl.value;
+            const duration = durationEl.value ? Number(durationEl.value) : 0;
+
+            if (!examName) { showMsg("error", "Please enter Exam name."); return; }
+            if (!subject) { showMsg("error", "Please select Subject."); return; }
+            if (!date) { showMsg("error", "Please select Date."); return; }
+            if (!time) { showMsg("error", "Please select Time."); return; }
+            if (duration < 0 || Number.isNaN(duration)) { showMsg("error", "Duration must be valid."); return; }
+
+            const exams = getExams();
+
+            if (editingExamId) {
+                const index = exams.findIndex(e => e.id === editingExamId);
+
+                if (index !== -1) {
+                    exams[index] = {
+                        ...exams[index],
+                        examName,
+                        subject,
+                        date,
+                        time,
+                        duration
+                    };
+                }
+
+                saveExams(exams);
+                showMsg("success", "Updated ✅");
+                editingExamId = null;
+                saveBtn.textContent = "Save";
+            } else {
+                exams.unshift({
+                    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+                    examName,
+                    subject,
+                    date,
+                    time,
+                    duration,
+                    createdAt: new Date().toISOString()
+                });
+
+                saveExams(exams);
+                showMsg("success", "Saved ✅");
+            }
+
+            clearForm();
+            renderExams();
+        });
+
+        cancelBtn.addEventListener("click", () => {
+            clearForm();
+            clearMsg();
+            editingExamId = null;
+            saveBtn.textContent = "Save";
+            window.location.href = "activity.html?tab=exam";
+        });
+
+        // initial render
+        renderExams();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | Smart Study Planner</title>
+
+    <style>
+        :root {
+            --bg: #eef6fb;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --blue: #1185ff;
+            --line: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 440px;
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            padding: 26px 22px;
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 32px;
+            text-align: center;
+        }
+
+        p {
+            margin: 0 0 18px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        label {
+            display: block;
+            font-weight: 900;
+            margin: 14px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1.5px solid #e6eef7;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: var(--blue);
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .msg {
+            margin-top: 14px;
+            display: none;
+            font-weight: 900;
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+            .msg.error {
+                background: #fee2e2;
+                color: #991b1b;
+                display: block;
+            }
+
+            .msg.success {
+                background: #dcfce7;
+                color: #166534;
+                display: block;
+            }
+
+        .bottom {
+            margin-top: 16px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+            .bottom a {
+                color: var(--blue);
+                text-decoration: none;
+                font-weight: 900;
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>Create Account</h1>
+        <p>Sign up to save your study plans and tasks.</p>
+
+        <form id="signupForm">
+
+            <label>Username</label>
+            <input id="username" required />
+
+            <label>Email</label>
+            <input id="email" type="email" required />
+
+            <label>Password</label>
+            <input id="password" type="password" minlength="5" required />
+
+            <label>Confirm Password</label>
+            <input id="confirm" type="password" required />
+
+            <button type="submit">Sign Up</button>
+
+            <div id="msgBox" class="msg"></div>
+
+        </form>
+
+        <div class="bottom">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+
+    </div>
+
+    <script>
+
+        function getUsers() {
+            return JSON.parse(localStorage.getItem("ssp_users") || "[]");
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem("ssp_users", JSON.stringify(users));
+        }
+
+        function showMsg(type, text) {
+            const msgBox = document.getElementById("msgBox");
+            msgBox.className = "msg " + type;
+            msgBox.textContent = text;
+        }
+
+        document.getElementById("signupForm").addEventListener("submit", (e) => {
+
+            e.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const password = document.getElementById("password").value;
+            const confirm = document.getElementById("confirm").value;
+
+            if (!username || !email || !password || !confirm) {
+                showMsg("error", "Please fill in all fields.");
+                return;
+            }
+
+            if (username.length < 3) {
+                showMsg("error", "Username must be at least 3 characters.");
+                return;
+            }
+
+            
+
+            if (password.length < 5) {
+                showMsg("error", "Password must be at least 5 characters long.");
+                return;
+            }
+
+            if (password !== confirm) {
+                showMsg("error", "Passwords do not match.");
+                return;
+            }
+
+            const users = getUsers();
+
+            if (users.some(u => u.email === email)) {
+                showMsg("error", "This email is already registered.");
+                return;
+            }
+
+            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+                showMsg("error", "Username already taken.");
+                return;
+            }
+
+            users.push({
+                id: crypto.randomUUID(),
+                username,
+                email,
+                password,
+                createdAt: new Date().toISOString()
+            });
+
+            saveUsers(users);
+
+            localStorage.setItem("ssp_loggedIn", "true");
+            localStorage.setItem("ssp_currentUser", email);
+            localStorage.setItem("ssp_username", username);
+
+            showMsg("success", "Account created! Redirecting...");
+
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 800);
+
+        });
+
+    </script>
+
+</body>
+</html>

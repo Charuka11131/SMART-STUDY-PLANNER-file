@@ -1,0 +1,1095 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Smart Study Planner</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --blue: #1185ff;
+      --blue2: #58c7ff;
+      --line: #e5e7eb;
+    }
+
+    /* ✅ Dark mode variables (used when body has class="dark") */
+    body.dark{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --text:#e5e7eb;
+      --muted:#a7b0c0;
+      --line:#22304c;
+      --blue:#4aa3ff;
+      --blue2:#2d7cff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: #f7fbff;
+      border-right: 1px solid #e9effa;
+      padding: 18px 14px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    body.dark .sidebar{
+      background: #0e1830;
+      border-right: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 10px 18px;
+      font-weight: 400;
+      color: #0b63ce;
+      font-size: 20px;
+    }
+
+    body.dark .brand{ color: var(--blue); }
+
+    .brand .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(17,133,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav { margin-top: 8px; display: flex; flex-direction: column; gap: 10px; }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 400;
+      padding: 12px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav a.active {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 10px 20px rgba(17,133,255,0.18);
+    }
+
+    .nav .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(17,133,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b63ce;
+    }
+
+    body.dark .nav .icon{ color: var(--blue); }
+
+    .nav a.active .icon {
+      background: rgba(255,255,255,0.25);
+      color: white;
+    }
+
+    .sidebarBottom {
+      position: absolute;
+      bottom: 18px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 400;
+    }
+
+    .btn.primary { background: var(--blue); color: white; }
+    .btn.ghost { background: white; color: #0b63ce; border: 1px solid #dbe7ff; }
+
+    body.dark .btn.ghost{
+      background: var(--card);
+      color: var(--blue);
+      border: 1px solid var(--line);
+    }
+
+    /* Main */
+    .main { flex: 1; padding: 18px 22px 26px; }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .timeDate { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+    .clock { font-size: 38px; font-weight: 400; letter-spacing: -0.5px; }
+    .dateText { color: var(--muted); font-weight: 400; }
+
+    /* ✅ Settings button */
+    .topRight {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .iconBtn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid #e6eef7;
+      background: #fff;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 18px;
+      color: var(--text);
+    }
+    .iconBtn:hover { background:#f4f8ff; }
+    body.dark .iconBtn{
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
+    .userChip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid #e6eef7;
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    body.dark .userChip{ border: 1px solid var(--line); }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: rgba(17,133,255,0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b63ce;
+      font-weight: 400;
+    }
+
+    body.dark .avatar{ color: var(--blue); }
+
+    .userInfo { display: flex; flex-direction: column; line-height: 1.1; }
+    .userEmail { font-size: 12px; color: var(--muted); }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+      border: 1px solid #eef2ff;
+    }
+    body.dark .card{ border: 1px solid var(--line); }
+
+    /* Greeting card */
+    .greetingCard {
+      padding: 20px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: white;
+      border: none;
+    }
+
+    .greetingRow { display: flex; gap: 16px; align-items: stretch; }
+    .greetingLeft { flex: 1.4; padding: 6px 4px; }
+    .smallTop { opacity: 0.9; margin-bottom: 6px; }
+    .hello { font-size: 34px; font-weight: 400; margin: 0; line-height: 1.05; }
+
+    /* Reminder banner */
+    .reminderBanner{
+      display:none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid #e6eef7;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    }
+    body.dark .reminderBanner{ border: 1px solid var(--line); }
+
+    /* Focus mini */
+    .focusPanel {
+      flex: 1;
+      background: rgba(255,255,255,0.20);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px;
+      min-height: 150px;
+    }
+
+    .focusRingWrap {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring {
+      --p: 0;
+      width: 130px;
+      height: 130px;
+      border-radius: 999px;
+      background: conic-gradient(rgba(255,255,255,0.95) calc(var(--p) * 1turn), rgba(255,255,255,0.25) 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ring::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 10px solid rgba(255,255,255,0.28);
+    }
+
+    .ringInner {
+      position: relative;
+      z-index: 1;
+      width: 86px;
+      height: 86px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .ringLabel { font-size: 12px; margin-bottom: 4px; }
+    .ringTime { font-size: 26px; font-weight: 600; }
+
+    .ringKnob {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .focusActions { display: flex; flex-direction: column; gap: 12px; }
+
+    .fab {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.25);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .fab.play {
+      background: rgba(255,255,255,0.95);
+      color: var(--blue);
+    }
+
+    /* Stats */
+    .statsRow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .miniLink {
+      text-decoration:none;
+      color: inherit;
+      display:block;
+    }
+
+    .miniCard {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid #e6eef7;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      transition: transform .08s ease;
+    }
+    body.dark .miniCard{ border: 1px solid var(--line); }
+    .miniLink:hover .miniCard { transform: translateY(-1px); }
+
+    .miniTop { display: flex; gap: 8px; align-items: center; }
+    .miniValue { font-size: 28px; color: #0b63ce; margin-top: 10px; }
+    body.dark .miniValue{ color: var(--blue); }
+    .miniSub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    /* Manage row */
+    .manageRow{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .manageCard{
+      background:var(--card);
+      border-radius: 18px;
+      border: 1px solid #e6eef7;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      padding: 14px;
+    }
+    body.dark .manageCard{ border: 1px solid var(--line); }
+
+    .manageTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .manageTitle{
+      font-size: 18px;
+      font-weight: 400;
+    }
+    .manageControls{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .pillSelect{
+      border: none;
+      background: #f3f4f6;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 400;
+      font-size: 12px;
+      color: #111827;
+      cursor: pointer;
+    }
+    body.dark .pillSelect{
+      background: #0f1b33;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    /* Right calendar */
+    .sideCard { padding: 16px; }
+
+    .sideTitle {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .sideTitle h3 { margin:0; font-weight:400; font-size:18px; }
+
+    .pillDrop .pillBtn{
+      border: none;
+      background: #f3f4f6;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 400;
+      font-size: 12px;
+      color: #111827;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    body.dark .pillDrop .pillBtn{
+      background:#0f1b33;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .pillDrop .caret{ opacity:0.8; }
+
+    .calendarRow { display:flex; gap:8px; flex-wrap:wrap; }
+
+    .dayPill {
+      width: 44px;
+      height: 52px;
+      border-radius: 14px;
+      background: #f3f4f6;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      color:#111827;
+      user-select:none;
+    }
+    body.dark .dayPill{
+      background:#0f1b33;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .dayPill small { color: var(--muted); font-weight:400; }
+
+    .daySchedule{
+      margin-top: 14px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid #eef2ff;
+      padding: 14px;
+      position: relative;
+      min-height: 360px;
+    }
+    body.dark .daySchedule{ border: 1px solid var(--line); }
+
+    .dayBadge{
+      width: 56px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      margin-bottom: 10px;
+    }
+    .dayBadge .dow{
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .dayBadge .num{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(17,133,255,0.18);
+      color:#0b63ce;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 700;
+    }
+    body.dark .dayBadge .num{ color: var(--blue); }
+
+    .scheduleWrap{
+      display:grid;
+      grid-template-columns: 54px 1fr;
+      gap: 10px;
+      align-items:start;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .timeCol .t{
+      height: 44px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+      padding-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .gridCol{
+      position: relative;
+      border-left: 1px solid #eef2ff;
+      min-height: 44px;
+    }
+    body.dark .gridCol{ border-left: 1px solid var(--line); }
+
+    .gridCol .row{
+      height: 44px;
+      border-bottom: 1px solid #f2f5ff;
+    }
+    body.dark .gridCol .row{ border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    .nowLine{
+      position:absolute;
+      left: 0;
+      right: 0;
+      height: 20px;
+      pointer-events:none;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding-left: 10px;
+    }
+    .nowLine .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+    .nowLine .line{
+      height: 2px;
+      background: rgba(17,133,255,0.55);
+      flex:1;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 1050px) {
+      .grid { grid-template-columns: 1fr; }
+      .statsRow { grid-template-columns: repeat(2, 1fr); }
+      .manageRow { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">🎓</div>
+      <div>SmartStudy</div>
+    </div>
+
+    <nav class="nav">
+      <a class="active" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
+      <a href="calender.html"><span class="icon">🗓</span> Calendar</a>
+      <a href="activity.html"><span class="icon">✅</span> Activities</a>
+      <a href="focus.html"><span class="icon">⏱</span> Focus Timer</a>
+    </nav>
+
+    <div class="sidebarBottom">
+      <button class="btn primary" onclick="alert('Next step: Add Task page');">＋ Add New</button>
+      <button class="btn ghost" id="logoutBtn">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="timeDate">
+        <div class="clock" id="clock">--:--</div>
+        <div class="dateText" id="dateText">Loading date…</div>
+      </div>
+
+      <div class="topRight">
+        <button class="iconBtn" id="settingsBtn" title="Settings">⚙️</button>
+
+        <div class="userChip">
+          <div class="avatar" id="avatar">U</div>
+          <div class="userInfo">
+            <div class="userName" id="userName">User</div>
+            <div class="userEmail" id="userEmail">email@example.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT -->
+      <section>
+        <div class="card greetingCard">
+          <div class="greetingRow">
+            <div class="greetingLeft">
+              <div class="smallTop" id="tasksToday">0 tasks due today.</div>
+              <h2 class="hello" id="greetingText">Good Afternoon, User.</h2>
+            </div>
+
+            <div class="focusPanel">
+              <div class="focusRingWrap">
+                <div class="ring" id="miniRing" style="--p:0;">
+                  <div class="ringInner">
+                    <div class="ringLabel">Focus</div>
+                    <div class="ringTime" id="focusTime">25:00</div>
+                  </div>
+                </div>
+                <div class="ringKnob" id="ringKnob" aria-hidden="true"></div>
+              </div>
+
+              <div class="focusActions">
+                <button class="fab" id="focusSettingsBtn" type="button" title="Open Focus Timer Settings">⚙️</button>
+                <button class="fab play" id="focusPlayBtn" type="button" title="Start / Pause">▶</button>
+                <button class="fab" id="focusResetBtn" type="button" title="Reset">↻</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ Reminder Banner -->
+        <div id="reminderBanner" class="reminderBanner">
+          <strong>Reminder:</strong> <span id="reminderText"></span>
+        </div>
+
+        <!-- Stats -->
+        <div class="statsRow">
+          <a class="miniLink" href="tasks.html?filter=pending" title="Open pending tasks">
+            <div class="miniCard">
+              <div class="miniTop">👀 Pending Tasks</div>
+              <div class="miniValue" id="pendingTasks">0</div>
+              <div class="miniSub">All time</div>
+            </div>
+          </a>
+
+          <a class="miniLink" href="tasks.html?filter=overdue" title="Open overdue tasks">
+            <div class="miniCard">
+              <div class="miniTop">⚠️ Overdue Tasks</div>
+              <div class="miniValue" id="overdueTasks">0</div>
+              <div class="miniSub">All time</div>
+            </div>
+          </a>
+
+          <a class="miniLink" href="tasks.html?filter=completed" title="Open completed tasks">
+            <div class="miniCard">
+              <div class="miniTop">👍 Tasks Completed</div>
+              <div class="miniValue" id="completedTasks">0</div>
+              <div class="miniSub">All time</div>
+            </div>
+          </a>
+
+          <div class="miniCard">
+            <div class="miniTop">🔥 Total Study Hours</div>
+            <div class="miniValue" id="totalHours">0</div>
+            <div class="miniSub">All time</div>
+          </div>
+        </div>
+
+        <!-- Manage Tasks + Exams -->
+        <div class="manageRow">
+          <div class="manageCard">
+            <div class="manageTop">
+              <div class="manageTitle">Tasks</div>
+              <div class="manageControls">
+                <select class="pillSelect" id="dashTaskSubject">
+                  <option value="">Select Subject</option>
+                  <option>Mathematics</option>
+                  <option>Physics</option>
+                  <option>Chemistry</option>
+                  <option>ICT</option>
+                  <option>English</option>
+                </select>
+                <select class="pillSelect" id="dashTaskView">
+                  <option value="current">Current</option>
+                  <option value="past">Past</option>
+                  <option value="overdue">Overdue</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn primary" style="width:100%;" id="openTasksBtn">Manage Tasks</button>
+          </div>
+
+          <div class="manageCard">
+            <div class="manageTop">
+              <div class="manageTitle">Exams</div>
+              <div class="manageControls">
+                <select class="pillSelect" id="dashExamSubject">
+                  <option value="">Select Subject</option>
+                  <option>Mathematics</option>
+                  <option>Physics</option>
+                  <option>Chemistry</option>
+                  <option>ICT</option>
+                  <option>English</option>
+                </select>
+                <select class="pillSelect" id="dashExamView">
+                  <option value="current">Current</option>
+                  <option value="past">Past</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn primary" style="width:100%;" id="openExamsBtn">Manage Exams</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT CALENDAR -->
+      <aside class="card sideCard">
+        <div class="sideTitle">
+          <h3>Calendar</h3>
+          <div class="pillDrop">
+            <button class="pillBtn" id="calModeBtn" type="button">
+              Day <span class="caret">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="calendarRow" id="calRow"></div>
+
+        <div class="daySchedule">
+          <div class="dayBadge" id="dayBadge">
+            <div class="dow" id="badgeDow">FRI</div>
+            <div class="num" id="badgeNum">20</div>
+          </div>
+
+          <div class="scheduleWrap" id="scheduleWrap">
+            <div class="timeCol" id="timeCol"></div>
+            <div class="gridCol" id="gridCol">
+              <div class="nowLine" id="nowLine" style="display:none;">
+                <div class="dot"></div>
+                <div class="line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // AUTH
+  const loggedIn = localStorage.getItem("ssp_loggedIn");
+  const currentUser = localStorage.getItem("ssp_currentUser"); // email
+  if (loggedIn !== "true" || !currentUser) window.location.href = "login.html";
+
+  // ✅ Apply dark mode on dashboard if enabled
+  const darkKey = "ssp_dark_" + currentUser;
+  if (localStorage.getItem(darkKey) === "true") {
+    document.body.classList.add("dark");
+  }
+
+  // Username
+  let username = localStorage.getItem("ssp_username");
+  if (!username) username = currentUser.split("@")[0];
+  const displayName = username.charAt(0).toUpperCase() + username.slice(1);
+
+  document.getElementById("userName").innerText = displayName;
+  document.getElementById("userEmail").innerText = currentUser;
+  document.getElementById("avatar").innerText = displayName.charAt(0).toUpperCase();
+
+  // ✅ Settings button opens settings.html
+  document.getElementById("settingsBtn").addEventListener("click", () => {
+    window.location.href = "settings.html";
+  });
+
+  // Clock + date
+  function updateTopTime() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("clock").innerText = `${hh}:${mm}`;
+    document.getElementById("dateText").innerText = now.toLocaleDateString(undefined, {
+      weekday: "long", month: "long", day: "numeric"
+    });
+  }
+  updateTopTime();
+  setInterval(updateTopTime, 1000);
+
+  // Greeting (includes night)
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 5) return "Good Night";
+    if (h < 12) return "Good Morning";
+    if (h < 18) return "Good Afternoon";
+    return "Good Evening";
+  }
+  document.getElementById("greetingText").innerText = `${getGreeting()}, ${displayName}.`;
+
+  // Task stats
+  const tasksKey = "ssp_tasks_" + currentUser;
+  const tasks = JSON.parse(localStorage.getItem(tasksKey) || "[]");
+
+  const totalHours = tasks.reduce((sum, t) => sum + Number(t.hours || 0), 0);
+  const completed = tasks.filter(t => t.done === true).length;
+  const pending = tasks.filter(t => t.done !== true).length;
+
+  const today0 = new Date(); today0.setHours(0,0,0,0);
+
+  const overdue = tasks.filter(t => {
+    if (t.done === true || !t.date) return false;
+    const d = new Date(t.date); d.setHours(0,0,0,0);
+    return d < today0;
+  }).length;
+
+  const dueToday = tasks.filter(t => {
+    if (t.done === true || !t.date) return false;
+    const d = new Date(t.date);
+    return d.toDateString() === new Date().toDateString();
+  }).length;
+
+  document.getElementById("totalHours").innerText = String(totalHours);
+  document.getElementById("completedTasks").innerText = String(completed);
+  document.getElementById("pendingTasks").innerText = String(pending);
+  document.getElementById("overdueTasks").innerText = String(overdue);
+  document.getElementById("tasksToday").innerText = `${dueToday} tasks due today.`;
+
+  // ✅ Reminders banner if enabled
+  const remKey = "ssp_reminders_" + currentUser;
+  const remindersOn = localStorage.getItem(remKey) === "true";
+
+  const banner = document.getElementById("reminderBanner");
+  const textEl = document.getElementById("reminderText");
+
+  if (banner && textEl && remindersOn && dueToday > 0) {
+    banner.style.display = "block";
+    textEl.textContent = `You have ${dueToday} task(s) due today.`;
+  }
+
+  // Manage buttons
+  document.getElementById("openTasksBtn").addEventListener("click", () => {
+    const subject = document.getElementById("dashTaskSubject").value;
+    const view = document.getElementById("dashTaskView").value;
+    const url = `tasks.html?filter=${encodeURIComponent(view)}&subject=${encodeURIComponent(subject)}`;
+    window.location.href = url;
+  });
+
+  document.getElementById("openExamsBtn").addEventListener("click", () => {
+    const subject = document.getElementById("dashExamSubject").value;
+    const view = document.getElementById("dashExamView").value;
+    const url = `exam.html?filter=${encodeURIComponent(view)}&subject=${encodeURIComponent(subject)}`;
+    window.location.href = url;
+  });
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("ssp_loggedIn");
+    localStorage.removeItem("ssp_currentUser");
+    localStorage.removeItem("ssp_username");
+    window.location.href = "login.html";
+  });
+
+  // Mini focus timer (reads saved focus minutes from focus.html)
+  const focusMinutesKey = "ssp_focus_minutes_" + currentUser;
+  const savedFocusMinutes = Number(localStorage.getItem(focusMinutesKey) || "25");
+
+  let focusTotalSeconds = savedFocusMinutes * 60;
+  let focusSecondsLeft = focusTotalSeconds;
+  let focusRunning = false;
+  let focusInterval = null;
+
+  const focusTimeEl = document.getElementById("focusTime");
+  const playBtn = document.getElementById("focusPlayBtn");
+  const resetBtn = document.getElementById("focusResetBtn");
+  const settingsBtn = document.getElementById("focusSettingsBtn");
+  const ringEl = document.getElementById("miniRing");
+  const knobEl = document.getElementById("ringKnob");
+
+  function formatMMSS(s) {
+    const mm = String(Math.floor(s / 60)).padStart(2, "0");
+    const ss = String(s % 60).padStart(2, "0");
+    return `${mm}:${ss}`;
+  }
+
+  function setRingProgress() {
+    const elapsed = focusTotalSeconds - focusSecondsLeft;
+    const p = focusTotalSeconds === 0 ? 0 : Math.min(1, Math.max(0, elapsed / focusTotalSeconds));
+    ringEl.style.setProperty("--p", p.toString());
+
+    const angle = (p * 360) - 90;
+    const r = 62;
+    const cx = 65, cy = 65;
+    const rad = angle * Math.PI / 180;
+    const x = cx + r * Math.cos(rad);
+    const y = cy + r * Math.sin(rad);
+
+    knobEl.style.left = x + "px";
+    knobEl.style.top = y + "px";
+    knobEl.style.bottom = "auto";
+    knobEl.style.transform = "translate(-50%, -50%)";
+  }
+
+  function renderFocus() {
+    focusTimeEl.textContent = formatMMSS(focusSecondsLeft);
+    setRingProgress();
+    playBtn.textContent = focusRunning ? "❚❚" : "▶";
+  }
+
+  function tickFocus() {
+    if (focusSecondsLeft > 0) {
+      focusSecondsLeft--;
+      renderFocus();
+    } else {
+      pauseFocus();
+    }
+  }
+
+  function startFocus() {
+    if (focusRunning) return;
+    focusRunning = true;
+    renderFocus();
+    focusInterval = setInterval(tickFocus, 1000);
+  }
+
+  function pauseFocus() {
+    focusRunning = false;
+    if (focusInterval) clearInterval(focusInterval);
+    focusInterval = null;
+    renderFocus();
+  }
+
+  playBtn.addEventListener("click", () => {
+    if (focusSecondsLeft === 0) focusSecondsLeft = focusTotalSeconds;
+    if (!focusRunning) startFocus();
+    else pauseFocus();
+  });
+
+  resetBtn.addEventListener("click", () => {
+    pauseFocus();
+    focusSecondsLeft = focusTotalSeconds;
+    renderFocus();
+  });
+
+  settingsBtn.addEventListener("click", () => {
+    window.location.href = "focus.html";
+  });
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === focusMinutesKey) {
+      const m = Number(e.newValue || "25");
+      focusTotalSeconds = m * 60;
+      focusSecondsLeft = focusTotalSeconds;
+      renderFocus();
+    }
+  });
+
+  renderFocus();
+
+  // Right day calendar
+  const calRow = document.getElementById("calRow");
+  const timeCol = document.getElementById("timeCol");
+  const gridCol = document.getElementById("gridCol");
+  const nowLine = document.getElementById("nowLine");
+  const badgeDow = document.getElementById("badgeDow");
+  const badgeNum = document.getElementById("badgeNum");
+
+  const daysShort = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  let selectedDate = new Date();
+
+  function startOfWeekMonday(d){
+    const x = new Date(d);
+    x.setHours(0,0,0,0);
+    const day = (x.getDay() + 6) % 7;
+    x.setDate(x.getDate() - day);
+    return x;
+  }
+
+  function setBadge(d){
+    const dow = d.toLocaleDateString(undefined,{ weekday:"short" }).toUpperCase();
+    badgeDow.textContent = dow;
+    badgeNum.textContent = d.getDate();
+  }
+
+  function buildWeekPills(){
+    calRow.innerHTML = "";
+    const start = startOfWeekMonday(selectedDate);
+
+    for(let i=0;i<7;i++){
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+
+      const pill = document.createElement("div");
+      pill.className = "dayPill";
+      pill.innerHTML = `<small>${daysShort[i]}</small><div>${d.getDate()}</div>`;
+
+      if (d.toDateString() === selectedDate.toDateString()){
+        pill.style.background = "var(--blue)";
+        pill.style.color = "white";
+      } else {
+        pill.style.cursor = "pointer";
+      }
+
+      pill.addEventListener("click", () => {
+        selectedDate = new Date(d);
+        setBadge(selectedDate);
+        buildWeekPills();
+        buildDayTimeline();
+      });
+
+      calRow.appendChild(pill);
+    }
+    setBadge(selectedDate);
+  }
+
+  function buildDayTimeline(){
+    timeCol.innerHTML = "";
+    gridCol.querySelectorAll(".row").forEach(r => r.remove());
+
+    const startHour = 1;
+    const endHour = 23;
+
+    for(let h=startHour; h<=endHour; h++){
+      const t = document.createElement("div");
+      t.className = "t";
+      const hr12 = (h % 12) || 12;
+      const ampm = h < 12 ? "AM" : "PM";
+      t.textContent = `${hr12} ${ampm}`;
+      timeCol.appendChild(t);
+
+      const row = document.createElement("div");
+      row.className = "row";
+      gridCol.appendChild(row);
+    }
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const sel = new Date(selectedDate); sel.setHours(0,0,0,0);
+
+    if (sel.getTime() !== today.getTime()){
+      nowLine.style.display = "none";
+      return;
+    }
+
+    const now = new Date();
+    const minutesFromStart = (now.getHours() - startHour) * 60 + now.getMinutes();
+    const totalMinutes = (endHour - startHour + 1) * 60;
+
+    const p = Math.min(1, Math.max(0, minutesFromStart / totalMinutes));
+    const gridHeight = (endHour - startHour + 1) * 44;
+    const y = p * gridHeight;
+
+    nowLine.style.display = "flex";
+    nowLine.style.top = `${y}px`;
+  }
+
+  buildWeekPills();
+  buildDayTimeline();
+  setInterval(buildDayTimeline, 60000);
+</script>
+</body>
+</html>

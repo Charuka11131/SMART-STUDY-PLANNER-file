@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About - Smart Study Planner</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        :root {
+            --bg: #dff0fb;
+            --text: #111827;
+            --muted: #4b5563;
+            --blue: #1185ff;
+            --blueDark: #0b63ce;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Top banner */
+        .topBanner {
+            padding: 70px 0 60px;
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        .pageTitle {
+            font-size: 64px;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        /* White sections */
+        .whiteSection {
+            background: var(--white);
+            padding: 70px 0;
+        }
+
+        .twoCol {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Image cards */
+        .imageCard {
+            display: flex;
+            justify-content: center;
+        }
+
+            .imageCard img {
+                width: 100%;
+                max-width: 520px;
+                height: auto;
+                border-radius: 18px;
+                box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+                background: #eef7ff;
+            }
+
+        /* Text styles */
+        .label {
+            color: #1e3a8a;
+            font-weight: 900;
+            letter-spacing: 1px;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .bigLine {
+            font-size: 36px;
+            font-weight: 900;
+            margin: 0 0 14px 0;
+        }
+
+            .bigLine span {
+                color: var(--blueDark);
+            }
+
+        .para {
+            color: var(--muted);
+            line-height: 1.7;
+            margin: 0 0 18px 0;
+            font-size: 16px;
+        }
+
+        ol {
+            margin: 0 0 16px 18px;
+            line-height: 1.8;
+            font-size: 16px;
+            color: #111827;
+        }
+
+        .mission {
+            margin-top: 16px;
+            font-weight: 800;
+            color: #111827;
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .pageTitle {
+                font-size: 46px;
+            }
+
+            .twoCol {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ABOUT TITLE -->
+    <div class="topBanner">
+        <div class="wrap">
+            <h1 class="pageTitle">About</h1>
+        </div>
+    </div>
+
+    <!-- SECTION 1 : THE PROBLEM -->
+    <div class="whiteSection">
+        <div class="wrap">
+            <div class="twoCol">
+
+                <!-- LEFT IMAGE -->
+                <div class="imageCard">
+                    <img src="https://www.fnu.edu/wp-content/smush-webp/2019/08/image1-1024x559.jpg.webp"
+                         alt="Students struggling with organisation" />
+                </div>
+
+                <!-- RIGHT TEXT -->
+                <div>
+                    <p class="label">THE PROBLEM.</p>
+
+                    <h2 class="bigLine">
+                        lack of organisation 🤝 <span>poor productivity</span>
+                    </h2>
+
+                    <p class="para">
+                        Students across the world are facing a major barrier to academic success:
+                    </p>
+
+                    <ol>
+                        <li>Their lack of organisation is hindering their productivity.</li>
+                        <li>As a result, their input ≠ output. Student efficiency needs revolutionizing.</li>
+                    </ol>
+
+                    <div class="mission">
+                        We are on a mission to solve this 🚀
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 : THE SOLUTION -->
+    <div class="whiteSection">
+        <div class="wrap">
+            <div class="twoCol">
+
+                <!-- LEFT TEXT -->
+                <div>
+                    <p class="label">THE SOLUTION.</p>
+
+                    <h2 class="bigLine">
+                        boosting academic performance through the
+                        <span>power of organisation ⚡</span>
+                    </h2>
+
+                    <p class="para">
+                        With better organisation comes increased productivity 📈.
+                        Productive and efficient work frees up time.
+                        <strong>Smart Study Planner</strong> gives students the gift of time,
+                        and the freedom to focus on the things that matter most.
+                    </p>
+                </div>
+
+                <!-- RIGHT IMAGE -->
+                <div class="imageCard">
+                    <img src="https://www.collegedata.com/hubfs/freshmandodont-4_small-1.jpg"
+                         alt="Students improving productivity through organisation" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

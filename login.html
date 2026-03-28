@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Smart Study Planner</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <style>
+    :root{
+      --bg:#eef6fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --blue:#1185ff;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      color:var(--text);
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.12);
+      padding:26px 22px;
+    }
+
+    h1{
+      margin:0 0 6px;
+      font-size:30px;
+      text-align:center;
+    }
+
+    p{
+      margin:0 0 18px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    label{
+      display:block;
+      font-weight:900;
+      margin:14px 0 8px;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1.5px solid #e6eef7;
+      outline:none;
+      font-size:15px;
+    }
+
+    input:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(17,133,255,.12);
+    }
+
+    button{
+      width:100%;
+      margin-top:18px;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:900;
+      font-size:16px;
+      cursor:pointer;
+      box-shadow:0 10px 20px rgba(17,133,255,.22);
+    }
+
+    button:hover{ filter:brightness(.98); }
+
+    .msg{
+      margin-top:14px;
+      display:none;
+      font-weight:900;
+      text-align:center;
+      padding:10px;
+      border-radius:12px;
+    }
+
+    .msg.error{
+      background:#fee2e2;
+      color:#991b1b;
+      display:block;
+    }
+
+    .msg.success{
+      background:#dcfce7;
+      color:#166534;
+      display:block;
+    }
+
+    .bottom{
+      margin-top:16px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .bottom a{
+      color:var(--blue);
+      text-decoration:none;
+      font-weight:900;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Welcome Back</h1>
+    <p>Login to continue your study planning.</p>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="Enter your email" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="Enter your password" required />
+
+      <button type="submit">Login</button>
+      <div id="msgBox" class="msg"></div>
+    </form>
+
+    <div class="bottom">
+      Don’t have an account?
+      <a href="signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    if (localStorage.getItem("ssp_loggedIn") === "true" && localStorage.getItem("ssp_currentUser")) {
+      window.location.href = "dashboard.html";
+    }
+
+    function safeParse(json, fallback) {
+      try { return JSON.parse(json); } catch { return fallback; }
+    }
+
+    function getUsers() {
+      return safeParse(localStorage.getItem("ssp_users") || "[]", []);
+    }
+
+    function showMsg(type, text) {
+      const msgBox = document.getElementById("msgBox");
+      msgBox.className = "msg " + type; // "msg error" / "msg success"
+      msgBox.textContent = text;
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      
+      const msgBox = document.getElementById("msgBox");
+      msgBox.className = "msg";
+      msgBox.textContent = "";
+
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value; // don't trim passwords
+
+      const users = getUsers();
+
+      // Match email case-insensitive, password exact
+      const user = users.find(u =>
+        String(u.email || "").toLowerCase() === email &&
+        String(u.password || "") === password
+      );
+
+      if (!user) {
+        showMsg("error", "Invalid email or password.");
+        return;
+      }
+
+      // Save login session
+      localStorage.setItem("ssp_loggedIn", "true");
+      localStorage.setItem("ssp_currentUser", String(user.email || email).toLowerCase());
+      localStorage.setItem("ssp_username", String(user.username || "").trim());
+
+      showMsg("success", "Login successful! Redirecting...");
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 300);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activities</title>
+<link rel="icon" href="favicon.ico">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+  font-weight:400;   /* ✅ NORMAL TEXT */
+}
+
+body{background:#f4f6f9;}
+
+.layout{display:flex; min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{
+  width:280px;
+  background:#ffffff;
+  padding:20px 16px;
+  border-right:1px solid #e9eef5;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:10px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px;
+  border-radius:16px;
+  text-decoration:none;
+  color:#1f2937;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  width:100%;
+  text-align:left;
+}
+
+.nav-item:hover{ background:#edf6ff; }
+
+.nav-item.active{
+  background:#1186e6;
+  color:#ffffff;
+}
+
+.icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:#eaf3ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+}
+
+/* Dropdown */
+.arrow{
+  margin-left:auto;
+  font-size:18px;
+  transition:0.2s;
+}
+.arrow.open{ transform:rotate(90deg); }
+
+.submenu{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-left:58px;
+  margin-top:-6px;
+  margin-bottom:6px;
+}
+
+.sub-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  text-decoration:none;
+  color:#1f2937;
+}
+
+.sub-item:hover{ background:#edf6ff; }
+
+.sub-item.active{
+  background:#1186e6;
+  color:#fff;
+}
+
+.sub-icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#eaf3ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  padding:30px;
+}
+
+.page-title{
+  font-size:30px;  /* smaller, cleaner */
+  margin-bottom:18px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #edf1f6;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.06);
+  max-width:900px;
+}
+
+.muted{
+  color:#6b7280;
+  margin-top:8px;
+}
+
+.links{
+  margin-top:16px;
+  display:flex;
+  gap:12px;
+}
+
+.pill{
+  padding:10px 14px;
+  border-radius:999px;
+  background:#eaf3ff;
+  color:#1186e6;
+  text-decoration:none;
+}
+
+.pill:hover{ background:#dcedff; }
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<nav class="nav">
+
+<a class="nav-item" href="dashboard.html">
+<div class="icon">🏠</div> Dashboard
+</a>
+
+<a class="nav-item" href="calender.html">
+<div class="icon">📅</div> Calendar
+</a>
+
+<button class="nav-item active">
+<div class="icon">🗒️</div> Activities
+<span class="arrow open">›</span>
+</button>
+
+<div class="submenu">
+<a class="sub-item" href="tasks.html">
+<div class="sub-icon">✅</div> Tasks
+</a>
+
+<a class="sub-item" href="exam.html">
+<div class="sub-icon">📝</div> Exam
+</a>
+</div>
+
+<a class="nav-item" href="focus.html">
+<div class="icon">⏱️</div> Focus Timer
+</a>
+
+</nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+<div class="page-title">Activities</div>
+
+<div class="card">
+<div>Choose what you want to manage:</div>
+<p class="muted">Click Tasks or Exam from the left menu, or use the quick buttons below.</p>
+
+<div class="links">
+<a class="pill" href="tasks.html">Go to Tasks</a>
+<a class="pill" href="exam.html">Go to Exam</a>
+</div>
+</div>
+
+</main>
+</div>
+</body>
+</html>

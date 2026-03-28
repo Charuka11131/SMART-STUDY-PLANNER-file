@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Timer | Smart Study Planner</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --card2: #f7fbff;
+            --text: #111827;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --line2: #e9effa;
+            --blue: #1185ff;
+            --blue2: #58c7ff;
+            --softBlue: #e3efff;
+            --shadow: 0 12px 28px rgba(0,0,0,0.08);
+        }
+
+        body.dark {
+            --bg: #0b1220;
+            --card: #101a2f;
+            --card2: #0f1a2d;
+            --text: #e5e7eb;
+            --muted: #a7b0c0;
+            --line: #22304c;
+            --line2: #22304c;
+            --blue: #4aa3ff;
+            --blue2: #69c7ff;
+            --softBlue: #182842;
+            --shadow: 0 12px 28px rgba(0,0,0,0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--card2);
+            border-right: 1px solid var(--line2);
+            padding: 18px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 20px;
+        }
+
+        .nav a {
+            display: block;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text);
+            margin-bottom: 8px;
+            transition: 0.2s ease;
+        }
+
+        .nav a:hover {
+            background: rgba(17,133,255,0.08);
+        }
+
+        .nav a.active {
+            background: var(--blue);
+            color: white;
+        }
+
+        .main {
+            flex: 1;
+            padding: 25px;
+        }
+
+        /* Top Clock */
+        .topbar {
+            margin-bottom: 20px;
+        }
+
+        .clock {
+            font-size: 40px;
+        }
+
+        .dateText {
+            color: var(--muted);
+        }
+
+        /* Focus Section */
+        .focusContainer {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Ring */
+        .ring {
+            --p: 0;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: conic-gradient(var(--blue2) calc(var(--p) * 1turn), var(--softBlue) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ring::after {
+            content: "";
+            position: absolute;
+            inset: 25px;
+            border-radius: 50%;
+            background: var(--card);
+            z-index: 0;
+        }
+
+        .ringInner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .ringInner h3 {
+            margin: 0;
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .ringTime {
+            font-size: 48px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        /* Buttons */
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .btnCircle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .playBtn {
+            width: 90px;
+            height: 90px;
+            background: var(--blue);
+            color: white;
+        }
+
+        .smallBtn {
+            background: var(--softBlue);
+            color: var(--blue);
+        }
+
+        /* Right text */
+        .rightPanel {
+            max-width: 400px;
+        }
+
+        .rightPanel h2 {
+            font-size: 32px;
+            margin-top: 0;
+            color: var(--text);
+        }
+
+        .rightPanel p {
+            color: var(--muted);
+        }
+
+        /* Settings modal */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .settingsCard {
+            width: 800px;
+            max-width: 100%;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            color: var(--text);
+        }
+
+        .settingsCard h2 {
+            margin-top: 0;
+        }
+
+        .settingsGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .settingsGrid label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .settingsCard select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--card2);
+            color: var(--text);
+            outline: none;
+        }
+
+        .settingsActions {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .settingsActions button {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            margin: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .saveBtn {
+            background: var(--blue);
+            color: white;
+        }
+
+        .cancelBtn {
+            background: var(--softBlue);
+            color: var(--text);
+        }
+
+        @media (max-width: 950px) {
+            .focusContainer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .app {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--line2);
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .focusContainer {
+                padding: 24px;
+                gap: 30px;
+            }
+
+            .ring {
+                width: 260px;
+                height: 260px;
+            }
+
+            .ring::after {
+                inset: 20px;
+            }
+
+            .ringTime {
+                font-size: 40px;
+            }
+
+            .settingsGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <aside class="sidebar">
+            <div class="brand">Smart Study</div>
+            <nav class="nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="calendar.html">Calendar</a>
+                <a href="activities.html">Activities</a>
+                <a href="focus.html" class="active">Focus Timer</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="topbar">
+                <div class="clock" id="clock">--:--</div>
+                <div class="dateText" id="dateText">Loading...</div>
+            </div>
+
+            <div class="focusContainer">
+                <div>
+                    <div class="ring" id="ring">
+                        <div class="ringInner">
+                            <h3>Focus</h3>
+                            <div class="ringTime" id="focusTime">25:00</div>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button class="btnCircle smallBtn" id="settingsBtn" type="button">⚙</button>
+                        <button class="btnCircle playBtn" id="playBtn" type="button">▶</button>
+                        <button class="btnCircle smallBtn" id="resetBtn" type="button">↻</button>
+                    </div>
+                </div>
+
+                <div class="rightPanel">
+                    <h2>You’ve got this.</h2>
+                    <p>Focused work makes you up to <b>five times</b> more productive.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="overlay" id="overlay">
+        <div class="settingsCard">
+            <h2>Pomodoro Setting</h2>
+
+            <div class="settingsGrid">
+                <div>
+                    <label for="focusMinutes">Focus Time</label>
+                    <select id="focusMinutes">
+                        <option value="25">25 Minutes</option>
+                        <option value="50">50 Minutes</option>
+                        <option value="60">60 Minutes</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="shortBreak">Short Break</label>
+                    <select id="shortBreak">
+                        <option>5 Minutes</option>
+                        <option>10 Minutes</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="longBreak">Long Break</label>
+                    <select id="longBreak">
+                        <option>15 Minutes</option>
+                        <option>20 Minutes</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="longBreakInterval">Long Break Interval</label>
+                    <select id="longBreakInterval">
+                        <option>2 intervals</option>
+                        <option>4 intervals</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settingsActions">
+                <button class="saveBtn" id="saveSettings" type="button">Save</button>
+                <button class="cancelBtn" id="cancelSettings" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // AUTH
+        const loggedIn = localStorage.getItem("ssp_loggedIn");
+        const currentUser = localStorage.getItem("ssp_currentUser");
+        if (loggedIn !== "true" || !currentUser) window.location.href = "login.html";
+
+        // DARK MODE
+        const darkKey = "ssp_dark_" + currentUser.toLowerCase();
+        if (localStorage.getItem(darkKey) === "true") {
+            document.body.classList.add("dark");
+        }
+
+        // Keys
+        const focusMinutesKey = "ssp_focus_minutes_" + currentUser.toLowerCase();
+
+        // CLOCK
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText =
+                String(now.getHours()).padStart(2, "0") + ":" +
+                String(now.getMinutes()).padStart(2, "0");
+
+            document.getElementById("dateText").innerText =
+                now.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // TIMER
+        let savedMinutes = Number(localStorage.getItem(focusMinutesKey) || "25");
+        let total = savedMinutes * 60;
+        let left = total;
+        let running = false;
+        let interval = null;
+
+        const ring = document.getElementById("ring");
+        const timeEl = document.getElementById("focusTime");
+        const playBtn = document.getElementById("playBtn");
+
+        function render() {
+            timeEl.innerText =
+                String(Math.floor(left / 60)).padStart(2, "0") + ":" +
+                String(left % 60).padStart(2, "0");
+
+            ring.style.setProperty("--p", total > 0 ? (total - left) / total : 0);
+        }
+
+        function tick() {
+            if (left > 0) {
+                left--;
+                render();
+            } else {
+                stop();
+            }
+        }
+
+        function start() {
+            if (running) return;
+            running = true;
+            interval = setInterval(tick, 1000);
+            playBtn.innerText = "❚❚";
+        }
+
+        function stop() {
+            running = false;
+            clearInterval(interval);
+            interval = null;
+            playBtn.innerText = "▶";
+        }
+
+        playBtn.onclick = () => {
+            if (!running) start();
+            else stop();
+        };
+
+        document.getElementById("resetBtn").onclick = () => {
+            stop();
+            left = total;
+            render();
+        };
+
+        // SETTINGS
+        const overlay = document.getElementById("overlay");
+        const focusSelect = document.getElementById("focusMinutes");
+
+        focusSelect.value = String(savedMinutes);
+
+        document.getElementById("settingsBtn").onclick = () => {
+            focusSelect.value = String(Number(localStorage.getItem(focusMinutesKey) || "25"));
+            overlay.classList.add("show");
+        };
+
+        document.getElementById("cancelSettings").onclick = () => {
+            overlay.classList.remove("show");
+        };
+
+        overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove("show");
+            }
+        });
+
+        document.getElementById("saveSettings").onclick = () => {
+            const mins = Number(focusSelect.value);
+
+            localStorage.setItem(focusMinutesKey, String(mins));
+
+            stop();
+            total = mins * 60;
+            left = total;
+            render();
+
+            overlay.classList.remove("show");
+        };
+
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Study Planner</title>
+
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        :root {
+            --bg: #dff0fb;
+            --text: #111827;
+            --muted: #4b5563;
+            --blue: #1185ff;
+            --blueDark: #0b63ce;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Top nav */
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            color: var(--blueDark);
+        }
+
+            .brand .logo {
+                width: 42px;
+                height: 42px;
+                border-radius: 10px;
+                background: rgba(17,133,255,0.15);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 900;
+                color: var(--blueDark);
+            }
+
+        .links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .links a {
+                text-decoration: none;
+                color: #1f2937;
+                font-weight: 600;
+                opacity: 0.9;
+            }
+
+                .links a:hover {
+                    opacity: 1;
+                    text-decoration: underline;
+                }
+
+        .navActions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-end;
+            min-width: 200px;
+        }
+
+        .btn {
+            border: 2px solid var(--blue);
+            color: var(--blue);
+            background: transparent;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+            .btn.primary {
+                background: var(--blue);
+                color: white;
+                border-color: var(--blue);
+            }
+
+        /* Hero layout (FIXED ALIGNMENT) */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 22px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* equal columns like reference */
+            gap: 40px;
+            align-items: center; /* vertical align */
+        }
+
+        h1 {
+            margin: 10px 0 12px;
+            font-size: 54px;
+            line-height: 1.05;
+            letter-spacing: -1px;
+        }
+
+        .desc {
+            margin: 0 0 22px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .ctaRow {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 16px 0 22px;
+        }
+
+        .ctaBig {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            font-weight: 900;
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+
+        /* Right image (FIXED SIZE + ALIGNMENT) */
+        .phoneWrap {
+            display: flex;
+            justify-content: center; /* center like reference */
+            align-items: center;
+        }
+
+        .phoneCard {
+            width: 100%;
+            max-width: 420px; /* smaller phone like your 2nd pic */
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+            background: transparent;
+            border: none;
+        }
+
+            .phoneCard img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+        .footerNote {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 22px 26px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .navActions {
+                min-width: auto;
+            }
+
+            .links {
+                display: none;
+            }
+
+            .phoneCard {
+                max-width: 360px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <div class="nav">
+        <div class="brand">
+            <div class="logo">🎓</div>
+            <div>SmartStudyPlanner</div>
+        </div>
+
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+        </div>
+
+        <div class="navActions">
+            <a class="btn primary" href="signup.html">Sign Up</a>
+            <a class="btn" href="login.html">Log in</a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div>
+            <h1>The Ultimate Student<br />Productivity Tool</h1>
+
+            <p class="desc">
+                Most students struggle with procrastination, missed deadlines, and academic stress.
+                <strong>Smart Study Planner</strong> helps you plan, focus, and succeed — a smarter way to stay organised.
+            </p>
+
+            <div class="ctaRow">
+                <a class="ctaBig" href="login.html">Get started for free</a>
+            </div>
+        </div>
+
+        <div class="phoneWrap">
+            <div class="phoneCard">
+                <img src="https://mystudylife.com/wp-content/uploads/2025/08/iPhone-14-Pro-Max.svg"
+                     alt="App preview image" />
+            </div>
+        </div>
+    </div>
+
+    <div class="footerNote">
+        Backed by the media, loved by students.
+    </div>
+</body>
+</html>

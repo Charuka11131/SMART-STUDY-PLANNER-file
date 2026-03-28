@@ -1,0 +1,357 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings | Smart Study Planner</title>
+
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --blue: #1185ff;
+        }
+
+        body.dark {
+            --bg: #0b1220;
+            --card: #101a2f;
+            --text: #e5e7eb;
+            --muted: #a7b0c0;
+            --line: #22304c;
+            --blue: #4aa3ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            padding: 26px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: 34px;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            padding: 10px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 14px;
+        }
+
+            .row:hover {
+                background: rgba(17,133,255,0.06);
+            }
+
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(17,133,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .btnLink {
+            border: none;
+            background: transparent;
+            color: var(--blue);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 12px;
+        }
+
+            .btnLink:hover {
+                background: rgba(17,133,255,0.10);
+            }
+
+        .switch {
+            position: relative;
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            background: #dbeafe;
+            border: 1px solid var(--line);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        body.dark .switch {
+            background: #1f2c44;
+        }
+
+        .knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            background: #fff;
+            transition: transform .18s ease;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+        }
+
+        .switch.on {
+            background: rgba(17,133,255,0.55);
+        }
+
+            .switch.on .knob {
+                transform: translateX(24px);
+            }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .toast {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+            display: none;
+            color: var(--text);
+            max-width: 360px;
+        }
+
+        @media (max-width:900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>Settings</h1>
+
+        <div class="grid">
+            <div class="panel">
+                <div class="row">
+                    <div class="left">
+                        <div class="icon">🔔</div>
+                        <div>
+                            <div class="title">Reminders</div>
+                            <div class="sub">Show due-today reminders on dashboard</div>
+                        </div>
+                    </div>
+
+                    <div class="switch" id="remSwitch" role="switch" aria-checked="false" tabindex="0">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="row">
+                    <div class="left">
+                        <div class="icon">🌙</div>
+                        <div>
+                            <div class="title">Dark Mode</div>
+                            <div class="sub">Change background to dark</div>
+                        </div>
+                    </div>
+
+                    <div class="switch" id="darkSwitch" role="switch" aria-checked="false" tabindex="0">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel full">
+                <div class="row">
+                    <div class="left">
+                        <div class="icon">🗑️</div>
+                        <div>
+                            <div class="title">Clear Account Data</div>
+                            <div class="sub">Delete only your tasks/exams/settings (not other users)</div>
+                        </div>
+                    </div>
+
+                    <button class="btnLink" id="clearBtn" type="button">Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // --- Auth check ---
+        const loggedIn = localStorage.getItem("ssp_loggedIn");
+        const currentUser = localStorage.getItem("ssp_currentUser");
+
+        if (loggedIn !== "true" || !currentUser) {
+            window.location.href = "login.html";
+        }
+
+        // --- Per-user keys ---
+        const kDark = "ssp_dark_" + currentUser.toLowerCase();
+        const kRem = "ssp_reminders_" + currentUser.toLowerCase();
+
+        const darkSwitch = document.getElementById("darkSwitch");
+        const remSwitch = document.getElementById("remSwitch");
+        const clearBtn = document.getElementById("clearBtn");
+
+        function toast(msg) {
+            const el = document.getElementById("toast");
+            el.textContent = msg;
+            el.style.display = "block";
+
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(() => {
+                el.style.display = "none";
+            }, 2200);
+        }
+
+        function setSwitch(el, on) {
+            el.classList.toggle("on", !!on);
+            el.setAttribute("aria-checked", on ? "true" : "false");
+        }
+
+        function applyDarkMode(on) {
+            document.body.classList.toggle("dark", !!on);
+            setSwitch(darkSwitch, !!on);
+            localStorage.setItem(kDark, String(!!on));
+        }
+
+        function applyReminders(on) {
+            setSwitch(remSwitch, !!on);
+            localStorage.setItem(kRem, String(!!on));
+        }
+
+        // --- Load saved settings ---
+        const darkOn = localStorage.getItem(kDark) === "true";
+        const remOn = localStorage.getItem(kRem) === "true";
+
+        applyDarkMode(darkOn);
+        applyReminders(remOn);
+
+        // --- Click handlers ---
+        darkSwitch.addEventListener("click", () => {
+            const nowOn = !(localStorage.getItem(kDark) === "true");
+            applyDarkMode(nowOn);
+            toast(nowOn ? "Dark mode enabled" : "Dark mode disabled");
+        });
+
+        remSwitch.addEventListener("click", () => {
+            const nowOn = !(localStorage.getItem(kRem) === "true");
+            applyReminders(nowOn);
+            toast(nowOn ? "Reminders enabled" : "Reminders disabled");
+        });
+
+        // --- Keyboard support ---
+        darkSwitch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                darkSwitch.click();
+            }
+        });
+
+        remSwitch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                remSwitch.click();
+            }
+        });
+
+        // --- Clear only this user's data ---
+        clearBtn.addEventListener("click", () => {
+            const ok = confirm("Clear your account data? This removes your tasks, exams, focus data and settings on this device.");
+            if (!ok) return;
+
+            const keysToRemove = [
+                "ssp_tasks_" + currentUser.toLowerCase(),
+                "ssp_exams_" + currentUser.toLowerCase(),
+                "ssp_focus_minutes_" + currentUser.toLowerCase(),
+                "ssp_dark_" + currentUser.toLowerCase(),
+                "ssp_reminders_" + currentUser.toLowerCase()
+            ];
+
+            keysToRemove.forEach(k => localStorage.removeItem(k));
+
+            document.body.classList.remove("dark");
+            setSwitch(darkSwitch, false);
+            setSwitch(remSwitch, false);
+
+            toast("Your account data cleared ✅");
+
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 700);
+        });
+    </script>
+</body>
+</html>
